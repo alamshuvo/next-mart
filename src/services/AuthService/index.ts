@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { jwtDecode } from "jwt-decode";
@@ -14,7 +15,6 @@ export const registerUser = async (userData: FieldValues) => {
       body: JSON.stringify(userData),
     });
     const result = await res.json();
-
     if (result.success) {
       (await cookies()).set("accessToken", result.data.accessToken);
     }
@@ -48,7 +48,7 @@ export const loginUser = async (userData: FieldValues) => {
 };
 
 export const getCurrentUser = async () => {
-  const accessToken = (await cookies()).get("accessToken")!.value;
+  const accessToken = (await cookies())?.get("accessToken")!.value;
   let decodedData = null;
 
   if (accessToken) {
