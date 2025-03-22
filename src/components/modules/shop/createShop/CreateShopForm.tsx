@@ -16,17 +16,21 @@ import Logo from "@/app/assets/svgs/Logo";
 
 import { useState } from "react";
 
-
 import { toast } from "sonner";
 import NMImageUploader from "@/components/ui/core/NMImageUploader";
 import ImagePreviewer from "@/components/ui/core/NMImageUploader/ImagePreviewer";
 import { createShop } from "@/services/Shop";
+import { createShopSchema } from "./createValidation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function CreateShopForm() {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreview, setImagePreview] = useState<string[] | []>([]);
 
-  const form = useForm();
+  const form = useForm({
+    // resolver: zodResolver(createShopSchema),
+  });
+
 
   const {
     formState: { isSubmitting },
@@ -37,7 +41,6 @@ export default function CreateShopForm() {
       .split(",")
       .map((service: string) => service.trim())
       .filter((service: string) => service !== "");
-
     const modifiedData = {
       ...data,
       servicesOffered: servicesOffered,
@@ -48,17 +51,12 @@ export default function CreateShopForm() {
       const formData = new FormData();
       formData.append("data", JSON.stringify(modifiedData));
       formData.append("logo", imageFiles[0] as File);
-
       const res = await createShop(formData);
-
       console.log(res);
-
-      if (res.success) {
-        toast.success(res.message);
+      if (res?.success) {
+        toast.success(res?.message);
       }
-    } catch (err: any) {
-      console.error(err);
-    }
+    } catch (error: any) {}
   };
 
   return (
