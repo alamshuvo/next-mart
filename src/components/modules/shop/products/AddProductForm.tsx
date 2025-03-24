@@ -80,6 +80,7 @@ export default function AddProductsForm() {
   const { append: appendFeatures, fields: featureFields } = useFieldArray({
     control: form.control,
     name: "keyFeatures",
+    
   });
 
   const addFeatures = () => {
