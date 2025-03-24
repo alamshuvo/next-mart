@@ -12,7 +12,7 @@ export const createBrand = async (data: FormData) => {
       },
       body: data,
     });
-
+  revalidateTag("Brands")
     return res.json();
   } catch (error: any) {
     return Error(error);
@@ -21,7 +21,11 @@ export const createBrand = async (data: FormData) => {
 
 export const getAllBrand = async ()=>{
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/brand`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/brand`,{
+          next: {
+            tags: ["Brands"],
+          },
+        })
         return res.json()
     } catch (error) {
         
